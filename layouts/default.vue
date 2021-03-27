@@ -22,5 +22,9 @@ export default {
 </script>
 
 <style>
-  
+  body {
+    font-size: 13px;
+    line-height: 10px;
+    color: #111
+  }
 </style>
