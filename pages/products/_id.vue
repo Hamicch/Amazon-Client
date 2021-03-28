@@ -6,7 +6,7 @@
                                 <ul class="a-unordered-list a-horizontal a-size-small">
                                         <li>
                                                 <span class="a-list-item">
-                                                        <a class="a-link-normal a-color-tertiary" href="#">Category</a>
+                                                        <a class="a-link-normal a-color-tertiary" href="#">{{ product.category.type }}</a>
                                                 </span>
                                         </li>
                                         <li>
@@ -14,7 +14,7 @@
                                         </li>
                                         <li>
                                                 <span class="a-list-item">
-                                                         <a class="a-link-normal a-color-tertiary" href="#">Product Title</a>
+                                                         <a class="a-link-normal a-color-tertiary" href="#">{{ product.title }}</a>
                                                 </span>
                                         </li>
                                 </ul>
@@ -30,7 +30,7 @@
                                                         <!-- Image -->
                                                         <div clas="imgBlock">
                 <div class="eBooksimg">
-                  <img src="/img/featuredProduct.jpg" class="img-fluid" />
+                  <img :src="product.photo" class="img-fluid" />
                 </div>
               </div>
 
@@ -44,14 +44,14 @@
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
                       <div class="smallAuthorImageContainer">
                         <a href="#">
-                          <img src="/img/featuredProduct.jpg" class="img-fluid" />
+                          <img :src="product.owner.photo" class="img-fluid" />
                         </a>
                       </div>
                     </div>
                     <!-- Author's Name -->
                     <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 col-3">
                       <div class="authorNameCol">
-                        <a href="#">Walter Isaacson</a>
+                        <a href="#">{{ product.owner.name }}</a>
                       </div>
                     </div>
                     <!-- Author's Follow Button -->
@@ -77,14 +77,14 @@
                           <!-- Product title  -->
                           <div class="titleDiv">
                                   <h1 class="productTitle">
-                                          <span class="largeTitle">Harry Potter</span>
+                                          <span class="largeTitle">{{ product.title }}</span>
                                           <span class="smallTitle">Papperback</span>
                                   </h1>
                           </div>
                           <!-- Author's Name  -->
                           <div class="bylineinfo">
                                   by
-                                  <a href="#" class="authorName">Walter Isaacson
+                                  <a href="#" class="authorName">{{ product.owner.name }}
                                           <i class="fas fa-chevron-down" style="font-size: 8px !important; color: #555 !important;"></i>
                                   </a>(Author)
                           </div>
@@ -167,7 +167,7 @@
 
                           <!-- Description  -->
                           <div class="bookDescription">
-                                  <div class="bookDescriptionInner">This book is awesome</div>
+                                  <div class="bookDescriptionInner">{{ product.description }}</div>
                           </div>
 
                           <!-- Product Specification  -->
@@ -199,7 +199,7 @@
 
                     <!-- Product Price -->
                     <div class="float-right">
-                      <span class="a-size-medium a-color-price offer-price a-text-normal">$39</span>
+                      <span class="a-size-medium a-color-price offer-price a-text-normal">${{ product.price  }}</span>
                     </div>
                   </div>
                 </div>
@@ -282,7 +282,7 @@
                       </form>
                     </div>
                     <div class="float-right">
-                      <span class="a-color-base offer-price a-text-normal">$39</span>
+                      <span class="a-color-base offer-price a-text-normal">${{ product.price }}</span>
                     </div>
                   </div>
                 </div>
@@ -293,8 +293,61 @@
               <img src="/img/readyondevice.png" class="img-fluid" />
             </div>
           </div>
-        </div>
-      </div>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="books-entity-teaser">
+                                        <div class="bucket"><h2>More about the author</h2></div>
+                                        <div class="content">
+                                                <div class="row">
+
+                                                        <!-- Author's photo and Button  -->
+                                                        <div class="col-md-2 col-sm-4 col-4">
+                                                                <div class="authorContent">
+                                                                        <div class="authorImageSingle">
+                                                                                <a href="#">
+                                                                                        <img :src="product.owner.photo" class="img-fluid">
+                                                                                </a>
+                                                                        </div>
+                                                                        <div class="authorFollow">
+                                                                                <div class="followButton">
+                                                                                        <button class="followButton" type="button">
+                                                                                                <span class="pr-fb-icon"></span>
+                                                                                                <span class="pr-fb-text">Follow</span>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                        <!-- Author's about  -->
+                                                        <div class="col-md-10 col-sm-8 col-8 pl-0">
+                                                                <div class="mainContent">
+                                                                        <h3>Biography</h3>
+                                                                        <div class="authorBio">{{ product.owner.about }}</div>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
         </main>
 </template>
+
+<script>
+export default {
+        async asyncData({ $axios, params }) {
+                try {
+                        let response= await $axios.$get(`/api/products/${params.id}`)
+
+                        console.log(response);
+
+                        return {
+                                product: response.product
+                        }
+                } catch (error) {
+                        console.log(error);
+                }
+        }
+}
+</script>
