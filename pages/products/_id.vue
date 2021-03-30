@@ -345,7 +345,7 @@ export default {
                         return {
                                 product: response.product
                         }
-                } catch (error) {
+                } catch (error) {       
                         console.log(error);
                 }
         }
