@@ -57,18 +57,18 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {}
-};
+  build: {},
 
-auth: {
-  strategies: {
-    locals: {
-      endpoints: {
-        login: {
-          propertyName: "token"
-        },
-        logout: true
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            propertyName: "token"
+          },
+          logout: true
+        }
       }
     }
   }
-}
+};
