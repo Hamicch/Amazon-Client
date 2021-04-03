@@ -19,7 +19,7 @@
                 <!-- Product Title -->
                 <div class="col-md-10 col-sm-9 col-9 m-auto">
                   <h4>
-                    <b> {{ product.title }} </b>
+                    <b>{{ product.title }}</b>
                   </h4>
                 </div>
               </div>
@@ -28,15 +28,13 @@
               <h2 class="a-spacing-base">Overall Rating</h2>
               <div class="a-row">
                 <!-- Rating -->
-                <no-ssr >
-                  <StarRating v-model="rating" />
-                </no-ssr>
+                <star-rating  v-model="rating"></star-rating>
               </div>
               <div class="a-row a-spacing-top-large">
                 <h2>Add photo or video</h2>
-                <p style="font-size: 14px; font-weight: 700;">
-                  Shoppers find images and videos more helpful than text alone.
-                </p>
+                <p
+                  style="font-size: 14px; font-weight: 700;"
+                >Shoppers find images and videos more helpful than text alone.</p>
               </div>
               <div class="a-row a-spacing-top-medium">
                 <!-- Choose a Photo -->
@@ -73,31 +71,20 @@
             <br />
             <hr />
             <div class="a-spacing-top-medium">
-              <p style="font-size: 14px; font-weight: 700;">
-                This is how you'll appear to other customers:
-              </p>
+              <p
+                style="font-size: 14px; font-weight: 700;"
+              >This is how you'll appear to other customers:</p>
               <div class="media a-spacing-top-large">
                 <div class="media-left">
-                  <img
-                    src="/img/avatar.png"
-                    class="img-fluid"
-                    style="width: 50px;"
-                  />
+                  <img src="/img/avatar.png" class="img-fluid" style="width: 50px;" />
                 </div>
                 <div class="media-body pl-3 pt-2">
-                  <input
-                    type="text"
-                    class="a-input-text"
-                    style="width: 100%;"
-                    :value="$auth.$state.user.name"
-                  />
+                  <input type="text" class="a-input-text" style="width: 100%;" />
                 </div>
               </div>
             </div>
             <div class="a-row a-spacing-top-medium">
-              <span class="a-color-tertiary"
-                >Don't worry, you can always change this on your profile</span
-              >
+              <span class="a-color-tertiary">Don't worry, you can always change this on your profile</span>
             </div>
             <div class="a-row text-right a-spacing-top-large">
               <span class="a-button-register">
@@ -120,54 +107,58 @@
 
 <script>
 
-import StarRating from "vue-star-rating";
 
 export default {
-  components: {
-    StarRating
-  },
-  async asyncData({ $axios, params }) {
-    try {
-      let response = await $axios.$get(`/api/product/${params.id}`);
-      return {
-        product: response.product
-      };
-    } catch (err) {
-      console.log(err);
-    }
-  },
-  data() {
-    return {
-      rating: 0,
-      body: "",
-      headline: "",
-      selectedFile: null,
-      fileName: null
-    };
-  },
-  methods: {
-    onFileSelected() {
-      this.selectedFile = event.target.files[0];
-      this.fileName = event.target.files[0].name;
-    },
-    async onAddReview() {
-      try {
-        let data = new FormData();
-        data.append("headline", this.headline);
-        data.append("body", this.body);
-        data.append("rating", this.rating);
-        data.append("photo", this.selectedFile, this.selectedFile.name);
-        let response = await this.$axios.$post(
-          `/api/reviews/${this.$route.params.id}`,
-          data
-        );
-        if (response.success) {
-          this.$router.push(`/products/${this.$route.params.id}`);
+        components: {
+                // StarRating: rating.StarRating,
+        },
+        async asyncData({ $axios, params }) {
+                try {
+                        let response = await $axios.$get(`/api/products/${params.id}`);
+
+                        return {
+                                product: response.product
+                        }
+                } catch (error) {
+                        console.log(error);
+                }
+        },
+        data() {
+                return {
+                        rating: 0,
+                        headline: "",
+                        body: "",
+                        selectedFile: null,
+                        fileName: null
+                }
+        },
+        methods: {
+                 onFileSelected(event) {
+                  this.selectedFile = event.target.files[0];
+                  console.log(this.selectedFile);
+                  this.fileName = event.target.files[0].name;
+          },
+          async onAddReview() {
+                  try {
+                          let data = new FormData();
+                          data.append("rating", this.rating);
+                          data.append("headline", this.headline);
+                          data.append("body", this.body);
+                          data.append("photo", this.selectedFile, this.selectedFile.name);
+                          console.log(this.rating);
+        
+                          let response = await this.$axios.$post(`/api/reviews/${this.$route.params.id}`, data)
+
+                           if (response.success) {
+                                this.$router.push(`/products/${this.$route.params.id}`);
+                                }
+
+                  } catch (error) {
+                          console.log(error);
+                  }
+
+       
+          }
         }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-};
+}
 </script>

@@ -86,9 +86,11 @@
                                   by
                                   <a href="#" class="authorName">{{ product.owner.name }}
                                           <i class="fas fa-chevron-down" style="font-size: 8px !important; color: #555 !important;"></i>
-                                  </a>(Author)
+                                  </a> (Author)
                           </div>
-                          <div class="reviewGroup"></div>
+                          <div class="reviewGroup">
+                                  <star-rating :rating="product.averageRating" :show-rating="false" :glow="1" :border-width="1" :rounded-corners="true" :read-only="true" :star-size="18" :star-point="[ 23,2,14,17,0,19,10,34,7,50,23,43,38,50,36,34,46,19,31,17 ]" />
+                          </div>
                           <hr style="margin-top: 10px">
                           
                           <!-- A tags dummy data  -->
@@ -329,21 +331,36 @@
                                                 </div>
                                         </div>
                                 </div>
+                                <ReviewSection  :product="product" :reviews="reviews" />
                         </div>
                 </div>
         </main>
 </template>
 
 <script>
+
+import ReviewSection from "~/components/ReviewSection";
+// import StarRating from "vue-star-rating"
+
 export default {
+        components: {
+                ReviewSection,
+                // StarRating
+        },
+
         async asyncData({ $axios, params }) {
                 try {
-                        let response= await $axios.$get(`/api/products/${params.id}`)
+                        let singleProduct = $axios.$get(`/api/products/${params.id}`);
+                         let manyReviews = $axios.$get(`/api/reviews/${params.id}`);
 
-                        console.log(response);
+                         const [ productResponse, reviewsResponse ] = await Promise.all([
+                                 singleProduct,
+                                 manyReviews
+                         ])
 
                         return {
-                                product: response.product
+                                product: productResponse.product,
+                               reviews: reviewsResponse.reviews
                         }
                 } catch (error) {       
                         console.log(error);
