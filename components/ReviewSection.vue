@@ -382,7 +382,6 @@
 
 <script>
 export default {
-  props: ['product', 'reviews']
-
+  props: ["product", "reviews"]
 };
 </script>

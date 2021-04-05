@@ -340,12 +340,11 @@
 <script>
 
 import ReviewSection from "~/components/ReviewSection";
-// import StarRating from "vue-star-rating"
+
 
 export default {
         components: {
                 ReviewSection,
-                // StarRating
         },
 
         async asyncData({ $axios, params }) {
